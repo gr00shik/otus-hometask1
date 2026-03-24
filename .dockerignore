@@ -1,0 +1,9 @@
+.gradle
+build
+*.txt
+*.json
+!settings.gradle
+!build.gradle
+README.md
+docker-compose.yml
+Dockerfile
