@@ -1,6 +1,7 @@
 package ru.otus.socialnetwork.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,8 @@ import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -24,7 +27,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UUID register(RegisterRequest request) {
-
+        log.debug("User registered: {}", request.getFirstName());
         if (isBlank(request.getFirstName())) {
             throw new IllegalArgumentException("first_name is required");
         }
@@ -49,6 +52,7 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+
         return user.getId();
     }
 
@@ -71,11 +75,15 @@ public class UserService {
         var start = System.nanoTime();
         var result = userRepository.searchByPrefix(firstNamePrefix, lastNamePrefix);
         System.out.println(System.nanoTime() - start);
+        log.debug("User search: {}", result.size());
+
         return result;
     }
 
     @Transactional(readOnly = true)
     public User getById(UUID userId) {
+        log.debug("User get by id: {}", userId);
+
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
