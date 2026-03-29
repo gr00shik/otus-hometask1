@@ -1,9 +1,9 @@
 package ru.otus.socialnetwork.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.socialnetwork.dto.RegisterRequest;
 import ru.otus.socialnetwork.exception.InvalidCredentialsException;
 import ru.otus.socialnetwork.exception.UserNotFoundException;
@@ -52,6 +52,7 @@ public class UserService {
         return user.getId();
     }
 
+    @Transactional(readOnly = true)
     public User login(UUID userId, String password) {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -62,6 +63,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional(readOnly = true)
     public List<User> search(String firstNamePrefix, String lastNamePrefix) {
         if (isBlank(firstNamePrefix) || isBlank(lastNamePrefix)) {
             throw new IllegalArgumentException("first_name and last_name are required");
@@ -72,6 +74,7 @@ public class UserService {
         return result;
     }
 
+    @Transactional(readOnly = true)
     public User getById(UUID userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
