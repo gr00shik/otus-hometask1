@@ -11,6 +11,7 @@ import ru.otus.socialnetwork.model.User;
 import ru.otus.socialnetwork.repository.UserRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -59,6 +60,16 @@ public class UserService {
             throw new InvalidCredentialsException("Invalid password");
         }
         return user;
+    }
+
+    public List<User> search(String firstNamePrefix, String lastNamePrefix) {
+        if (isBlank(firstNamePrefix) || isBlank(lastNamePrefix)) {
+            throw new IllegalArgumentException("first_name and last_name are required");
+        }
+        var start = System.nanoTime();
+        var result = userRepository.searchByPrefix(firstNamePrefix, lastNamePrefix);
+        System.out.println(System.nanoTime() - start);
+        return result;
     }
 
     public User getById(UUID userId) {

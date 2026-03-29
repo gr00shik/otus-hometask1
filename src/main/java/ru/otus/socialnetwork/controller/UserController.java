@@ -9,6 +9,7 @@ import ru.otus.socialnetwork.dto.UserResponse;
 import ru.otus.socialnetwork.model.User;
 import ru.otus.socialnetwork.service.UserService;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -26,6 +27,27 @@ public class UserController {
                 .register(request);
 
         return ok(new RegisterResponse(userId.toString()));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserResponse>> search(
+            @RequestParam("first_name") String firstName,
+            @RequestParam("last_name") String lastName) {
+
+        var users = userService.search(firstName, lastName);
+
+        var response = users.stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId().toString())
+                        .firstName(user.getFirstName())
+                        .secondName(user.getSecondName())
+                        .birthdate(user.getBirthdate() != null ? user.getBirthdate().toString() : null)
+                        .biography(user.getBiography())
+                        .city(user.getCity())
+                        .build())
+                .toList();
+
+        return ok(response);
     }
 
     @GetMapping("/get/{id}")
