@@ -1,0 +1,42 @@
+[
+  {
+    "first_name": "Иван",
+    "second_name": "Петров",
+    "birthdate": "1990-01-15",
+    "biography": "Люблю программирование и путешествия",
+    "city": "Москва",
+    "password": "password123"
+  },
+  {
+    "first_name": "Мария",
+    "second_name": "Сидорова",
+    "birthdate": "1992-05-20",
+    "biography": "Дизайнер, увлекаюсь фотографией",
+    "city": "Санкт-Петербург",
+    "password": "password123"
+  },
+  {
+    "first_name": "Алексей",
+    "second_name": "Козлов",
+    "birthdate": "1988-11-03",
+    "biography": "DevOps инженер",
+    "city": "Новосибирск",
+    "password": "password123"
+  },
+  {
+    "first_name": "Елена",
+    "second_name": "Волкова",
+    "birthdate": "1995-07-10",
+    "biography": "Аналитик данных",
+    "city": "Казань",
+    "password": "password123"
+  },
+  {
+    "first_name": "Дмитрий",
+    "second_name": "Новиков",
+    "birthdate": "1991-03-25",
+    "biography": "Backend разработчик на Java",
+    "city": "Москва",
+    "password": "password123"
+  }
+]
