@@ -1,11 +1,15 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/social_network
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+    master:
+      url: jdbc:postgresql://localhost:5433/social_network
+      username: postgres
+      password: postgres
+    slave:
+      url: jdbc:postgresql://localhost:5434/social_network
+      username: postgres
+      password: postgres
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
 
 server:

@@ -1,9 +1,10 @@
 package ru.otus.socialnetwork.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.socialnetwork.dto.RegisterRequest;
 import ru.otus.socialnetwork.exception.InvalidCredentialsException;
 import ru.otus.socialnetwork.exception.UserNotFoundException;
@@ -16,6 +17,8 @@ import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -24,7 +27,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UUID register(RegisterRequest request) {
-
+        log.debug("User registered: {}", request.getFirstName());
         if (isBlank(request.getFirstName())) {
             throw new IllegalArgumentException("first_name is required");
         }
@@ -49,9 +52,11 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+
         return user.getId();
     }
 
+    @Transactional(readOnly = true)
     public User login(UUID userId, String password) {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -62,6 +67,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional(readOnly = true)
     public List<User> search(String firstNamePrefix, String lastNamePrefix) {
         if (isBlank(firstNamePrefix) || isBlank(lastNamePrefix)) {
             throw new IllegalArgumentException("first_name and last_name are required");
@@ -69,10 +75,15 @@ public class UserService {
         var start = System.nanoTime();
         var result = userRepository.searchByPrefix(firstNamePrefix, lastNamePrefix);
         System.out.println(System.nanoTime() - start);
+        log.debug("User search: {}", result.size());
+
         return result;
     }
 
+    @Transactional(readOnly = true)
     public User getById(UUID userId) {
+        log.debug("User get by id: {}", userId);
+
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }

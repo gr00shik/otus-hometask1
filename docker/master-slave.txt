@@ -1,0 +1,10 @@
+Останавливаем контейнер с pg-master
+docker stop pg-master
+
+Перекидывем слейв на мастер
+docker exec -u postgres pg-slave-1 pg_ctl promote -D /var/lib/postgresql/data
+
+Переключаем pg-slave-2 на нового мастера
+
+docker exec pg-slave-2 bash -c "sed -i \"s/host=''pg-master''/host=''pg-slave-1''/\" /var/lib/postgresql/data/postgresql.auto.conf"
+docker restart pg-slave-2
