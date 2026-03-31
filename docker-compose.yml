@@ -62,6 +62,19 @@ services:
       pg-master:
         condition: service_healthy
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   app:
     build: .
     container_name: social-network-app
@@ -74,11 +87,16 @@ services:
       SPRING_DATASOURCE_SLAVE_URL: jdbc:postgresql://pg-slave-1:5432/social_network
       SPRING_DATASOURCE_SLAVE_USERNAME: postgres
       SPRING_DATASOURCE_SLAVE_PASSWORD: postgres
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
     depends_on:
       pg-master:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
 volumes:
   pgdata-master:
   pgdata-slave1:
   pgdata-slave2:
+  redis-data:
