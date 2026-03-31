@@ -20,6 +20,12 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(ex.getMessage(), UUID.randomUUID().toString(), 404));
     }
 
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePostNotFound(PostNotFoundException ex) {
+        return status(NOT_FOUND)
+                .body(new ErrorResponse(ex.getMessage(), UUID.randomUUID().toString(), 404));
+    }
+
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException ex) {
         return status(BAD_REQUEST)
