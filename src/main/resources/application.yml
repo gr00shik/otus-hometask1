@@ -8,6 +8,10 @@ spring:
       url: jdbc:postgresql://localhost:5434/social_network
       username: postgres
       password: postgres
+    citus:
+      url: jdbc:postgresql://localhost:5436/postgres
+      username: postgres
+      password: postgres
   flyway:
     enabled: false
     locations: classpath:db/migration
